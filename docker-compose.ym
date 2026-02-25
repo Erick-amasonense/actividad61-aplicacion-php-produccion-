@@ -1,23 +1,25 @@
-version: '3.8'
-
 services:
   mariadb:
     image: mariadb:10.6
     container_name: mariadb_container
     restart: always
-    env_file: .env
+    environment:
+      - MYSQL_ROOT_PASSWORD=ErickEncarnacion@2006
+      - MYSQL_DATABASE=daftpunk_db
+      - MYSQL_USER=usuarioErEn
+      - MYSQL_PASSWORD=ErickEncarnacion@2006
     volumes:
       - mariadb_data:/var/lib/mysql
       - ./sql:/docker-entrypoint-initdb.d
     networks:
       - daftpunk_net
+
   www:
-    build: .
+    # Cambiamos 'build: .' por 'image'
+    image: erickamasonense/actividad61-aplicacion-crud-php:latest
     container_name: web_container
     ports:
       - "80:80"
-    volumes:
-      - ./src:/var/www/html
     environment:
       - MARIADB_HOST=mariadb
       - MARIADB_DATABASE=daftpunk_db
@@ -27,6 +29,7 @@ services:
       - mariadb
     networks:
       - daftpunk_net
+
 volumes:
   mariadb_data:
 
